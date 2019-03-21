@@ -22,4 +22,6 @@ public interface OlifyProductRepository extends JpaRepository<OlifyProduct, Long
 
 	int getAvailableProducts(OlifyProduct product); // method returns the number of available quantity of a Product passed to it
 	int orderProduct(OlifyProduct product, int orderedQuantity); //places an order for product
+
+	OlifyProduct getOne(String productname);
 }

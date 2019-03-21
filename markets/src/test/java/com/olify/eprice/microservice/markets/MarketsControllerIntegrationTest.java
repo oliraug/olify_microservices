@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.olify.eprice.microservice.markets.Model.Markets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes=MarketsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -26,18 +27,25 @@ public class MarketsControllerIntegrationTest {
 
 	@Test
 	public void test_shouldListAllMarkets() throws Exception {
-		ResponseEntity<String> response = template.getForEntity(marketURL(), String.class);
+		//Arrange
 		
+		//Act
+		ResponseEntity<Markets> response = template.getForEntity(marketURL(), Markets.class);
+		
+		//Assert
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().getMarketName()).isEqualTo("Nakawa Market");
+		assertThat(response.getBody().getMarketStatus()).isEqualTo("Active");
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode responseJson = objectMapper.readTree(response.getBody());
+		
+		/*ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode responseJson = objectMapper.reader(response.getBody());
 		
 		assertThat(responseJson.isMissingNode()).isFalse();
-		//assertThat(responseJson.toString()).isEqualTo(marketURL());
+		//assertThat(responseJson.toString()).isEqualTo(marketURL());*/
 	}
 
 	private String marketURL() {
-		return "http://localhost:" + serverPort;
+		return "http://localhost:+ serverPort/olify/markets";
 	} 
 }

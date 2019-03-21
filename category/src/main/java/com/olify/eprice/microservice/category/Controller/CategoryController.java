@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.olify.eprice.microservice.category.Service.CategoryService;
 import com.olify.eprice.microservice.category.model.OlifyCategory;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
 
-@Api(value = "CATEGORIES", description = "Item Categories")  //Swagger Annotation
+//@Api(value = "CATEGORIES", description = "Item Categories")  //Swagger Annotation
 @RestController
 @ExposesResourceFor(OlifyCategory.class)
 @RequestMapping(value="/olify", produces="application/json")
@@ -22,9 +20,16 @@ public class CategoryController {
 
 	/*Get category by id*/
 	@GetMapping(value="/categories/{id}")
-	@ApiOperation(value = "Get a category", notes = "Return category")
+	//@ApiOperation(value = "Get a category", notes = "Return category")
 	public OlifyCategory getCategoryById(@PathVariable Long id) {
 		return categoryService.findOne(id);
+	}
+	
+	/*Get category by name*/
+	@GetMapping(value="/categories/{categoryName}")
+	//@ApiOperation(value = "Get a category name", notes = "Return category name")
+	public OlifyCategory getCategoryByName(@PathVariable("categoryName") String categoryName) {
+		return categoryService.findByCategoryName(categoryName);
 	}
 
 }

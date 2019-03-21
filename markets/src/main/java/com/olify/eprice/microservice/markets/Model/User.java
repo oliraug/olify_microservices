@@ -2,9 +2,15 @@ package com.olify.eprice.microservice.markets.Model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Enumerated;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.springframework.data.annotation.LastModifiedDate;
+
+import com.olify.eprice.microservice.markets.Enums.Sex;
 import com.olify.eprice.microservice.markets.Enums.Speciality;
 
 import javax.persistence.EnumType;
@@ -16,9 +22,13 @@ public class User {
 	private String email;
 	private String password;
 	private String phoneNo;
-	private String sex;
+	@Enumerated(EnumType.STRING)
+	private Sex sex;
 	@Enumerated(EnumType.STRING)
 	private Speciality speciality;
+	@Column(name="created_date", insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
 	private Date createdAt;
 	
 	public User() {
@@ -65,11 +75,11 @@ public class User {
 		this.phoneNo = phoneNo;
 	}
 
-	public String getSex() {
+	public Sex getSex() {
 		return sex;
 	}
 
-	public void setSex(String sex) {
+	public void setSex(Sex sex) {
 		this.sex = sex;
 	}
 

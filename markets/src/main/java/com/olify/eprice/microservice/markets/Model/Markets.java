@@ -30,25 +30,22 @@ public class Markets {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator="native")
 	@GenericGenerator(name="native", strategy="native")
-	@Column(name="id")
+	@Column(name="id", unique=true, nullable=false)
 	private Long id;
 	@Column(name="market_name")
 	@NotBlank
 	private String marketName;
-	@Column(name="market_status")
-	@NotBlank
+	@Column(name="market_status", nullable=false)
 	@Enumerated(EnumType.STRING)
 	private MarketStatus marketStatus;
-	@Column(name="user")
+	@Column(name="user", nullable=false)
 	@Embedded
-	@NotBlank
 	private User user;
 	@Column(name="location")
 	@NotBlank
 	private String location;
-	@Column(name="product")
+	@Column(name="product", nullable=false)
 	@Embedded
-	@NotBlank
 	private OlifyProduct product;
 	@Column(name="country")
 	@NotBlank
@@ -66,10 +63,9 @@ public class Markets {
 		super();
 	}
 	
-	public Markets(Long id, String marketName,MarketStatus marketStatus, User user, String location, OlifyProduct product,
+	public Markets(String marketName,MarketStatus marketStatus, User user, String location, OlifyProduct product,
 			String country, Date createdAt, Date updatedAt) {
 		super();
-		this.id = id;
 		this.marketName = marketName;
 		this.marketStatus = marketStatus;
 		this.user = user;

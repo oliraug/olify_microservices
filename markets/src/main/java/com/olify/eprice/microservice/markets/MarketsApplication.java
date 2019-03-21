@@ -9,8 +9,9 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import com.olify.eprice.microservice.markets.Component.MarketsRegistrar;
+import com.olify.eprice.microservice.markets.Component.MarketsRepositoryImpl;
 import com.olify.eprice.microservice.markets.Repository.MarketsRepository;
+import com.olify.eprice.microservice.markets.Repository.MarketsRepositoryCustom;
 import com.zaxxer.hikari.HikariDataSource;
 
 @SpringBootApplication
@@ -24,12 +25,17 @@ public class MarketsApplication {
 	
 	@Bean(name="marketsRepository")
 	public MarketsRepository marketsRepository() {
-		return marketsRepository();
+		return null;
 	}
 	
-	@Bean(name="marketsRegistrar")
-	public MarketsRegistrar marketsRegistrar() {
-		return new MarketsRegistrar();
+	@Bean(name="marketsRepositoryImpl")
+	public MarketsRepositoryImpl marketsRepositoryImpl() {
+		return new MarketsRepositoryImpl();
+	}
+	
+	@Bean(name="marketsRepositoryCustom")
+	public MarketsRepositoryCustom marketsRepositoryCustom() {
+		return null;
 	}
 	
 	@Bean
@@ -54,10 +60,10 @@ public class MarketsApplication {
 	public HikariDataSource dataSource() {
 		HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setMaximumPoolSize(100);
-		dataSource.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.addDataSourceProperty("url", "jdbc:mysql://localhost:3306/olify_markets?useSSL=false");
-		dataSource.addDataSourceProperty("user", "root");
-		dataSource.addDataSourceProperty("password", "olify");
+		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/olify_markets");
+		dataSource.setUsername("root");
+		dataSource.setPassword("olify");
 		dataSource.addDataSourceProperty("cachePrepStmts", true);
 		dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
 		dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);

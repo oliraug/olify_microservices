@@ -86,7 +86,7 @@ public class OlifyProductRegistrar {
 				
 				//creating transaction object
 				Transaction tx = session.beginTransaction();
-				OlifyProduct updateProduct = session.load(OlifyProduct.class,product.getProductId());
+				OlifyProduct updateProduct = session.load(OlifyProduct.class,product.getId());
 				updateProduct.setProductName(product.getProductName());
 				updateProduct.setUnits(product.getUnits());
 				updateProduct.setPrice(product.getPrice());
@@ -116,8 +116,12 @@ public class OlifyProductRegistrar {
 			return true;
 		}
 
+		private OlifyProduct getOne(String productname) {
+			return productRepo.getOne(productname);
+		}
+
 		//getting product by name
-		public OlifyProduct getOne(String productname) {
+		public OlifyProduct getOne(Long id) {
 			Session session = getSessionFactory().openSession();
 			OlifyProduct product = (OlifyProduct) session.createQuery("FROM olify_product WHERE product_name = :product_name");
 			
@@ -137,7 +141,7 @@ public class OlifyProductRegistrar {
 			session.close();
 			logger.info("Successfully created"+ product.toString());
 			
-			return product.getProductId();
+			return product.getId();
 			
 		}
 

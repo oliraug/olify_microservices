@@ -30,7 +30,7 @@ public class OlifyProductFormatter implements Formatter<OlifyProduct> {
 
 	@Override
 	public String print(OlifyProduct olifyProduct, Locale locale) {
-		return olifyProduct.getProductId().toString();
+		return olifyProduct.getId().toString();
 	}
 	
 	/*

@@ -76,7 +76,7 @@ public class OlifyProductControllerTest {
 	@Test
 	public void testListAllProducts() throws Exception {
 		OlifyProduct product = new OlifyProduct();
-		product.setProductId(1L);
+		product.setId(1L);
 		Mockito.when(mockProductRegistrar.getOne(1L)).thenReturn(product);
 		
 		ResponseEntity<OlifyProduct> op = mockProductController.getProductById(1L, null);

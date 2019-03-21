@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.olify.eprice.microservice.category.Repository.CategoryRepository;
+import com.olify.eprice.microservice.category.Repository.CategoryRepositoryCustom;
 import com.olify.eprice.microservice.category.model.OlifyCategory;
 
 /**
@@ -22,7 +23,7 @@ import com.olify.eprice.microservice.category.model.OlifyCategory;
  *
  */
 @Service
-public class CategoryService {
+public class CategoryService implements CategoryRepositoryCustom{
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@Autowired
@@ -30,11 +31,13 @@ public class CategoryService {
 
 	
 	//Save category
+	@Override
 	public OlifyCategory saveCategory(OlifyCategory category) {
 		return categoryRepository.save(category);
 	}
 	
-	//Get all categories	
+	//Get all categories
+	@Override
 	public List<OlifyCategory> findAll(){
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -47,12 +50,19 @@ public class CategoryService {
 	//Update category
 	
 	//Delete category
+	@Override
 	public void deleteCategory(OlifyCategory category) {
 		categoryRepository.delete(category);
 	}
 	
 	//Get category by id
+	@Override
 	public OlifyCategory findOne(Long id) {
 		return categoryRepository.getOne(id);
+	}
+
+	@Override
+	public OlifyCategory findByCategoryName(String categoryName) {
+		return categoryRepository.findByCategoryName(categoryName);
 	}
 }

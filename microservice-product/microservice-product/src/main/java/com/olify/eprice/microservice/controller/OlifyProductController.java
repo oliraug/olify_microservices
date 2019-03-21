@@ -67,9 +67,9 @@ public class OlifyProductController {
 	/*
 	 * Get a single product
 	 */
-	@GetMapping(value="olifyproduct/{productId}", produces="application/json")
-	public ResponseEntity<OlifyProduct> getProductById(@PathVariable(value="productId") Long productId, HttpServletRequest request){
-		OlifyProduct product = productRegistrar.getOne(productId);
+	@GetMapping(value="olifyproduct/{id}", produces="application/json")
+	public ResponseEntity<OlifyProduct> getProductById(@PathVariable(value="productId") Long id, HttpServletRequest request){
+		OlifyProduct product = productRegistrar.getOne(id);
 		/*To generate a Device object from HttpServletRequest*/
 		Device currentDevice = DeviceUtils.getCurrentDevice(request);
 		if(currentDevice.isNormal()) {
@@ -109,7 +109,7 @@ public class OlifyProductController {
 		}
 		productRegistrar.createProduct(product);
 		productRegistrar.saveProduct(product);
-		final URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/olifyproduct/{productId}").build().expand(product.getProductId()).toUri();
+		final URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/olifyproduct/{productId}").build().expand(product.getId()).toUri();
 		final HttpHeaders headers = new HttpHeaders();
 		headers.add("Product created-", String.valueOf(product.getProductName()));
 		headers.add("Content-Type","application/json; charset=utf-8");
@@ -153,7 +153,7 @@ public class OlifyProductController {
 		
 		productRegistrar.saveOrUpdate(product);
 		
-		headers.add("Product updated", String.valueOf(product.getProductId()));
+		headers.add("Product updated", String.valueOf(product.getId()));
 		return new ResponseEntity<OlifyProduct>(product, headers, HttpStatus.OK);
 		}
 	

@@ -20,4 +20,5 @@ public interface CategoryRepository extends JpaRepository<OlifyCategory, Long>{
 	OlifyCategory findCategoryById(Long categoryId);
 	List<OlifyCategory> findAll();
 	void delete(OlifyCategory category);
+	OlifyCategory findByCategoryName(String categoryName);
 }

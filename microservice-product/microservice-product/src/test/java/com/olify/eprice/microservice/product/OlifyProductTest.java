@@ -20,6 +20,18 @@ import com.olify.eprice.microservice.model.OlifyProduct;
  *
  */
 public class OlifyProductTest {
+	long id = 1L;
+	String productName = "Mangoes, Oranges, Pineapples";
+	int units = 120;
+	Double price = 2000.00;
+	int unitsInStock = 120;
+	int unitsOnOrder = 35;
+	int quantityPerUnit = 15;
+	String productMeasures = "Kgs";
+	String productStatus = "active";
+	String productIntention = "Selling";
+	Date createdDate = new Date(12/12/2018);
+	String enteredBy = "Moses Masiga";
 
 	/**
 	 * @throws java.lang.Exception
@@ -36,41 +48,17 @@ public class OlifyProductTest {
 	}
 	
 	private OlifyProduct createTestProductOne() {
-		long productId = 1L;
-		String productName = "Mangoes, Oranges, Pineapples";
-		int units = 120;
-		Double price = 2000.00;
-		int unitsInStock = 120;
-		int unitsOnOrder = 35;
-		int quantityPerUnit = 15;
-		String productMeasures = "Kgs";
-		String productStatus = "active";
-		String productIntention = "Selling";
-		Date createdDate = new Date(12/12/2018);
-		String enteredBy = "Moses Masiga";
-		
-		return new OlifyProduct(productId, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
+				
+		return new OlifyProduct(id, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
 				productIntention, createdDate, enteredBy);
 	}
 
 	@Test
 	public void testProductShouldFillInAllParameters() throws Exception {
-		long productId = 1L;
-		String productName = "Mangoes, Oranges, Pineapples";
-		int units = 120;
-		Double price = 2000.00;
-		int unitsInStock = 120;
-		int unitsOnOrder = 35;
-		int quantityPerUnit = 15;
-		String productMeasures = "Kgs";
-		String productStatus = "active";
-		String productIntention = "Selling";
-		Date createdDate = new Date(12/12/2018);
-		String enteredBy = "Moses Masiga";
 		
-		OlifyProduct toProduct = new OlifyProduct(productId, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
+		OlifyProduct toProduct = new OlifyProduct(id, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
 				productIntention, createdDate, enteredBy);
-		assertEquals((long) toProduct.getProductId(), 1L);
+		assertEquals((long) toProduct.getId(), 1L);
 		assertThat(toProduct.getProductName()).isEqualTo(productName);
 		assertThat(toProduct.getUnits()).isEqualTo(units);
 		assertThat(toProduct.getPrice()).isEqualTo(price);

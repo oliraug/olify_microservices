@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.olify.eprice.microservice.markets.MarketsNotFoundException;
 import com.olify.eprice.microservice.markets.Component.MarketsRepositoryImpl;
@@ -23,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value = "MARKETS", description = "Agricultural Markets")  //Swagger Annotation
 @RestController
+@EnableWebMvc
 @ExposesResourceFor(Markets.class)
 @RequestMapping(value="/olify", produces="application/json")
 public class MarketsController {
@@ -44,14 +46,14 @@ public class MarketsController {
 	}
 	
 	@PostMapping(value="/markets/{marketName}")
-	//@ApiOperation(value = "Get market by user", notes = "Return a page of markets")
+	@ApiOperation(value = "Get market by user", notes = "Return a page of markets")
 	public Markets getAllMarkets(@PathVariable("marketName") String marketName) throws MarketsNotFoundException{
 		return marketsRepositoryImpl.getMarketDetails(marketName);		
 	}
 	
 	/*Update market by id*/
 	@PutMapping("markets/{id}")
-	//@ApiOperation(value = "Update market", notes = "Return updated markets")
+	@ApiOperation(value = "Update market", notes = "Return updated markets")
 	public ResponseEntity<Markets> updateMarket(@PathVariable("id") Long id, @Valid @RequestBody Markets marketDetails){
 		Markets market = marketsRepositoryImpl.findOne(id);
 		if(market == null) {
@@ -72,7 +74,7 @@ public class MarketsController {
 	
 	/*Delete market*/
 	@DeleteMapping("/markets/{id}")
-	//@ApiOperation(value = "Delete a market", notes = "")
+	@ApiOperation(value = "Delete a market", notes = "")
 	public ResponseEntity<Markets> deleteMarket(@PathVariable("id") Long id){
 		Markets market = marketsRepositoryImpl.findOne(id);
 		if(market == null) {

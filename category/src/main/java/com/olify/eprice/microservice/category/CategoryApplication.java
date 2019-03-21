@@ -2,6 +2,7 @@ package com.olify.eprice.microservice.category;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -16,6 +17,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableDiscoveryClient
+@ConfigurationProperties(prefix="spring.datasource.hikari")
 public class CategoryApplication {
 
 	public static void main(String[] args) {
@@ -44,23 +46,22 @@ public class CategoryApplication {
 	public HikariDataSource dataSource() {
 		HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setMaximumPoolSize(100);
-		dataSource.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.addDataSourceProperty("url", "jdbc:mysql://localhost:3306/standard_accounting");
-		dataSource.addDataSourceProperty("user", "root");
-		dataSource.addDataSourceProperty("password", "olify");
-		dataSource.addDataSourceProperty("cachePrepStmts", true);
-		dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
+		//dataSource.setDriverClassName("org.hsqldb.jdbc.JDBCDriver");
+		//dataSource.setJdbcUrl("jdbc:h2:mem:TEST");
+		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/olify_markets");
+		dataSource.setUsername("root");
+		dataSource.setPassword("olify");
+		dataSource.setConnectionTestQuery("SELECT 1");
+		dataSource.setPoolName("HikariCP");
+		dataSource.setIdleTimeout(10000);
 		dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
         dataSource.addDataSourceProperty("useServerPrepStmts", true);
         dataSource.addDataSourceProperty("useSSL", false);
+        
+        //HikariDataSource hikariConfig = new HikariDataSource(dataSource);
 		return dataSource;
 	}
-	
-	/*@Bean
-	@ConfigurationProperties("application.properties")
-	public HikariDataSource dataSource() {
-		return DataSourceBuilder.create().type(HikariDataSource.class).build();
-	}*/
 	
 	@Bean(name="categoryService")
 	public CategoryService categoryService() {

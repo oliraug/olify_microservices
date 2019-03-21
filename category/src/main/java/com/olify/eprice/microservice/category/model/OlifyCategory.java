@@ -6,6 +6,7 @@ package com.olify.eprice.microservice.category.model;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author Olify
@@ -20,6 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name ="olify_category")
+@EntityListeners(AuditingEntityListener.class)
 public class OlifyCategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator="native")
@@ -43,9 +46,8 @@ public class OlifyCategory {
 		super();
 	}
 	
-	public OlifyCategory(Long id, OlifyUser user, String categoryName, String categoryStatus, String description) {
+	public OlifyCategory(OlifyUser user, String categoryName, String categoryStatus, String description) {
 		super();
-		this.id = id;
 		this.user = user;
 		this.categoryName = categoryName;
 		this.categoryStatus = categoryStatus;

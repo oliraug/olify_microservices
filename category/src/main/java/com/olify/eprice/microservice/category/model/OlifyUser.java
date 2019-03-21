@@ -14,15 +14,11 @@ import javax.persistence.Embeddable;
 public class OlifyUser{
 	private Long id;
     private String email;
-	private String password;
-	
-	private boolean enabled = true;
-	
-	private String profileImg;
-	
+	private String password;	
+	private boolean enabled = true;	
+	private String profileImg;	
 	@Column(name="not_expired")
-	private boolean accountNonExpired;
-	
+	private boolean accountNonExpired;	
 	@Column(name="not_locked")
 	private boolean accountNonLocked;
 	
