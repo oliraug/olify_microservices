@@ -37,5 +37,4 @@ public class InvoiceRegistrar {
 		}
 		return invoice;		
 	}
-
 }

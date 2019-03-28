@@ -24,4 +24,10 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 	Accounts updateAccount(Accounts accounts);
 
 	Accounts findOne(String accountName);
+
+	double findByAmount(double amount);
+
+	void findByBalance(double amount);
+
+	Accounts getAccount(Accounts accountNo);
 }

@@ -43,4 +43,10 @@ public class Address {
 		this.city = city;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(street).append(city).append(zip);
+		return builder.toString();
+	}
 }

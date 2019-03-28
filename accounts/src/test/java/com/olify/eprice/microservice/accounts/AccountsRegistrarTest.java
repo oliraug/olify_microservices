@@ -3,18 +3,19 @@ package com.olify.eprice.microservice.accounts;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.olify.eprice.microservice.component.AccountsRegistrar;
 import com.olify.eprice.microservice.model.Accounts;
+import com.olify.eprice.microservice.model.InsufficientFundsException;
 import com.olify.eprice.microservice.repository.AccountsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -22,17 +23,21 @@ public class AccountsRegistrarTest {
 	private Accounts mockAccounts;
 	@Mock
 	private AccountsRepository accountsRepo;
-	@Mock
+	@InjectMocks
 	private AccountsRegistrar mockRegistrar;
+	private double amount;
 	
 	@Before
 	public void setUp() throws Exception {
 		mockRegistrar = mock(AccountsRegistrar.class);
-		//mockAccounts = mock(Accounts.class);
+		mockAccounts = mock(Accounts.class);
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		mockAccounts = null;
+		accountsRepo = null;
+		mockRegistrar = null;
 	}
 
 	@Test
@@ -46,7 +51,7 @@ public class AccountsRegistrarTest {
 	
 	@Test
 	public void test_createNewAccount() throws Exception {
-		mockAccounts = new Accounts();
+		//mockAccounts = new Accounts();
 		mockAccounts.setAccountName("Masiga Moses");
 		mockAccounts.setAccountType("Current");
 		mockAccounts.setBalance(10000.00);
@@ -60,7 +65,7 @@ public class AccountsRegistrarTest {
 		 * check if accounts has the same composition
 		 */
 		assertThat(mockAccounts, isA(Accounts.class));
-		assertThat(mockAccounts.getAccountName()).isEqualTo(newAccountInserted.getAccountName());
+		assertThat(mockAccounts).isEqualTo(newAccountInserted);
 	}
 	
 	@Test
@@ -70,12 +75,9 @@ public class AccountsRegistrarTest {
 		oldAccount.setAccountName("Masiga Moses");
 		oldAccount.setAccountType("current");
 		
-		//Check if the account is still the same. it is expected to be different since we updated it.
-		String name = oldAccount.getAccountName();
 		Accounts expectedAccount = new Accounts();
 		expectedAccount = mockRegistrar.updateAccount(oldAccount);
-		assertThat(expectedAccount, isA(Accounts.class));
-		assertThat(name).isNotEqualTo(expectedAccount.getAccountName());		
+		assertThat(expectedAccount).isEqualTo(oldAccount);	
 	}
 	
 	@Test
@@ -85,6 +87,34 @@ public class AccountsRegistrarTest {
 		toBeRemovedAccount.setAccountName("Masiga Moses");
 		toBeRemovedAccount.setAccountType("current");
 		//remove the account
-		assertTrue(mockRegistrar.removeAccount(toBeRemovedAccount));
+		assertThat(mockRegistrar.removeAccount(toBeRemovedAccount)).isTrue();
 	}
+	
+	@Test
+	public void test_AccountShouldBeEmptyAfterCreation() throws Exception {
+		// given is for preconditions 
+		//account = new Accounts();
+		// when is for actions
+		double balance = mockRegistrar.getBalance(amount);
+		// then is for performing validations
+		assertThat(0.00).isEqualTo(balance);
+	}
+	
+	@Test
+	public void test_shouldAllowToCreditAccount() throws Exception {
+		// given
+		//account = new Accounts();
+		// when
+		mockRegistrar.deposit(mockAccounts, 12000.0);
+		// then
+		double balance = mockRegistrar.getBalance(amount);
+		assertThat(12000.0).isEqualTo(balance);
+	}
+	
+	@Test
+	public void test_shouldTransferMoneyFromOneAccountToAnother() throws InsufficientFundsException{
+		Accounts account = new Accounts(5000.00);
+		mockRegistrar.transferTo(1000.00, account);
+		assertThat(mockRegistrar.getBalance(amount)).isEqualTo(4000.00);
+	} 
 }

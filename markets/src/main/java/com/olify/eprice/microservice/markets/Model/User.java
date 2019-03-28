@@ -17,7 +17,7 @@ import javax.persistence.EnumType;
 
 @Embeddable
 public class User {
-	private Long userId;
+	private Long id;
 	private String name;
 	private String email;
 	private String password;
@@ -31,16 +31,28 @@ public class User {
 	@LastModifiedDate
 	private Date createdAt;
 	
+	public User(String name, String email, String password, String phoneNo, Sex sex, Speciality speciality,
+			Date createdAt) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.phoneNo = phoneNo;
+		this.sex = sex;
+		this.speciality = speciality;
+		this.createdAt = createdAt;
+	}
+
 	public User() {
 		super();
 	}
 
-	public Long getUserId() {
-		return userId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -97,5 +109,13 @@ public class User {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(name).append(email).append(password).append(phoneNo).append(sex)
+				.append(speciality).append(createdAt);
+		return builder.toString();
 	}
 }

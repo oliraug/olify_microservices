@@ -173,17 +173,10 @@ public class Bank {
 
 	@Override
 	public String toString() {
-		return "Bank [bankName=" + bankName +","
-					+ "bankCode=" + bankCode +","
-					+ "bankStreet=" + bankStreet +","
-					+ "bankZip=" + bankZip +","
-					+ "bankCity=" + bankCity +","
-					+ "bankState=" + bankState +","
-					+ "bankPhone=" + bankPhone +","
-					+ "bankFax=" + bankFax +","
-					+ "bankEmail=" + bankEmail +","
-					+ "bankCountry=" + bankCountry +","
-					+ "bankStatus=" + bankStatus +","
-					+ "id=" + id +"]";
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(bankName).append(bankCode).append(bankStreet).append(bankZip)
+				.append(bankCity).append(bankState).append(bankPhone).append(bankFax).append(bankEmail)
+				.append(bankCountry).append(bankStatus);
+		return builder.toString();
 	}
 }

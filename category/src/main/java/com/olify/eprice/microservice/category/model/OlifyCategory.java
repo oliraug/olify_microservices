@@ -21,7 +21,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  *
  */
 @Entity
-@Table(name ="olify_category")
+@Table(name ="olify_category", catalog="olify_category")
 @EntityListeners(AuditingEntityListener.class)
 public class OlifyCategory {
 	@Id
@@ -41,7 +41,6 @@ public class OlifyCategory {
 	@Column(name="description")
 	private String description;
 	
-
 	public OlifyCategory() {
 		super();
 	}
@@ -54,7 +53,6 @@ public class OlifyCategory {
 		this.description = description;
 	}
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -97,9 +95,8 @@ public class OlifyCategory {
 
 	@Override
 	public String toString() {
-		return "OlifyCategory [categoryName=" + categoryName + ", categoryStatus="
-				+ categoryStatus + ", description=" + description
-				+ ", user=" + user
-				+ ", id=" + id + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(categoryName).append(user).append(categoryStatus).append(description);
+		return builder.toString();
 	}
 }

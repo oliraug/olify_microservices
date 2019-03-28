@@ -7,5 +7,5 @@ import com.olify.eprice.microservice.banks.model.Bank;
 
 @Repository
 public interface BankRepository extends JpaRepository<Bank, Integer>{
-
+	Bank findByBankName(String string);
 }

@@ -26,6 +26,17 @@ public class OlifyUser{
 	 super();
 	}
 
+	public OlifyUser(String email, String password, boolean enabled, String profileImg, boolean accountNonExpired,
+			boolean accountNonLocked) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.enabled = enabled;
+		this.profileImg = profileImg;
+		this.accountNonExpired = accountNonExpired;
+		this.accountNonLocked = accountNonLocked;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -80,5 +91,12 @@ public class OlifyUser{
 
 	public void setAccountNonLocked(boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
+	}
+	
+	@Override
+	public String toString() {
+		return "OlifyUser [id=" + id + ", email=" + email + ", password=" + password + ", enabled=" + enabled
+				+ ", profileImg=" + profileImg + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked="
+				+ accountNonLocked + "]";
 	}
 }

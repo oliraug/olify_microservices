@@ -200,4 +200,14 @@ public class OlifyInvoice {
 	public void setPaymentTerms(String paymentTerms) {
 		this.paymentTerms = paymentTerms;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(category).append(product).append(customer).append(billingAddress)
+				.append(invoiceNo).append(invoiceDate).append(quantity).append(unitOfMeasure)
+				.append(unitCost).append(subTotal).append(vat).append(total)
+				.append(paymentTerms).append(updated).append(description);
+		return builder.toString();
+	}
 }

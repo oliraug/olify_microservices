@@ -49,7 +49,8 @@ public class AccountsRegistrar {
 	}
 
 	public Accounts updateAccount(Accounts accounts) {
-		return accountsRepository.updateAccount(accounts);
+		//return accountsRepository.updateAccount(accounts);
+		return accounts;
 	}
 
 	public boolean removeAccount(Accounts accounts) {
@@ -58,6 +59,23 @@ public class AccountsRegistrar {
 
 	public List<Accounts> findAll(Long id) {
 		return accountsRepository.findAll();
+	}
+
+	public double getBalance(double amount) {
+		return accountsRepository.findByAmount(amount);
+		
+	}
+
+	public void deposit(Accounts accountNo, double amount) {
+		Accounts account = accountsRepository.getAccount(accountNo);	
+		double balance = account.getBalance();
+		balance += amount;
+		account.setBalance(balance);
+		accountsRepository.updateAccount(account);
+	}
+
+	public void transferTo(double amount, Accounts accountNo) {
+		deposit(accountNo, amount);		
 	}
 
 }

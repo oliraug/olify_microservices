@@ -150,14 +150,9 @@ public class Markets {
 	
 	@Override
 	public String toString() {
-		return "Markets [marketName=" + marketName + ","
-						+ "marketStatus=" + marketStatus +", "
-						+ "user=" + user +", "
-						+ "location=" + location +","
-						+ "product=" + product +","
-						+ "country=" + country +","
-						+ "createdAt=" + createdAt +","
-						+ "updatedAt=" + updatedAt +","
-						+ "id=" + id +"]";
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(marketName).append(user).append(product).append(location)
+				.append(country).append(marketStatus).append(createdAt).append(updatedAt);
+		return builder.toString();
 	}
 }

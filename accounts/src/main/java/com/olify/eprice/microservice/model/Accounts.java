@@ -83,7 +83,7 @@ public class Accounts {
 		this.notes = notes;
 	}
 	public Accounts(double amount) {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getAccountName() {
 		return accountName;
@@ -158,23 +158,16 @@ public class Accounts {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+		
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(accountName);
+		builder.append(id).append(accountName).append(parent).append(internalType)
+				.append(accountType).append(debit).append(credit).append(balance)
+				.append(accountStatus).append(defaultTaxes).append(reconcillation).append(notes);
 		return builder.toString();
-		//return ToStringBuilder.reflectionToString(this);
 	}
 	
-	/*@Override
-	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		return EqualsBuilder.reflectionEquals(this, obj);
-	}*/
 	public void deposit(double amount) {
 		balance += amount;		
 	}

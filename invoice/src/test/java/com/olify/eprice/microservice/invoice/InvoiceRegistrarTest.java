@@ -40,7 +40,7 @@ public class InvoiceRegistrarTest {
 	public void test_shouldGenerateAnInvoice() throws Exception{
 		long countBefore = invoiceRepository.count();
 		invoice = new OlifyInvoice(1L, new OlifyCustomer(1L, "Masiga", "Moses", "olify@olify.com", "0704008863"), new Date(2/19/19), new Address("Mutungo Bbiina", "+256", "Kampala"),
-									   new OlifyProduct("Pineapples", 2500.00));
+									   new OlifyProduct(countBefore, "Pineapples", 2500.00, 0, 0, 0, 0, null, null, null, null, null));
 		invoiceRegistrar.generateInvoice(invoice);
 		assertThat(invoiceRepository.count(),is(countBefore));
 		//assertThat(invoiceRepository.findById(1L)).isEqualTo(0L);

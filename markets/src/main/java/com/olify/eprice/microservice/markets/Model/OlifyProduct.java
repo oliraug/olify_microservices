@@ -17,7 +17,7 @@ import com.olify.eprice.microservice.markets.Enums.ProductStatus;
 
 @Embeddable
 public class OlifyProduct {
-	private Long productId;
+	private Long id;
 	private String productName;
 	private Double price;
 	private int units;
@@ -39,11 +39,28 @@ public class OlifyProduct {
 	public OlifyProduct() {
 		super();
 	}
-	public Long getProductId() {
-		return productId;
+	
+	public OlifyProduct(String productName, Double price, int units, int unitsInStock, int unitsOnOrder, int quantityPerUnit,
+			ProductMeasures productMeasures, ProductStatus productStatus, ProductIntention productIntention, Date createdDate,
+			String enteredBy) {
+		this.productName = productName;
+		this.price = price;
+		this.units = units;
+		this.unitsInStock = unitsInStock;
+		this.unitsOnOrder = unitsOnOrder;
+		this.quantityPerUnit = quantityPerUnit;
+		this.productMeasures = productMeasures;
+		this.productStatus = productStatus;
+		this.productIntention = productIntention;
+		this.createdDate = createdDate;
+		this.enteredBy = enteredBy;		
 	}
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public String getProductName() {
 		return productName;
@@ -110,5 +127,14 @@ public class OlifyProduct {
 	}
 	public void setEnteredBy(String enteredBy) {
 		this.enteredBy = enteredBy;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(id).append(productName).append(price).append(units).append(unitsInStock).append(unitsOnOrder)
+				.append(quantityPerUnit).append(productMeasures).append(productStatus).append(productIntention)
+				.append(createdDate).append(enteredBy);
+		return builder.toString();
 	}
 }
