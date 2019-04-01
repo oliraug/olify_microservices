@@ -9,6 +9,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import com.olify.eprice.microservice.banks.component.BankRepositoryImpl;
 import com.olify.eprice.microservice.banks.controller.BankController;
+import com.olify.eprice.microservice.banks.model.Bank;
 import com.zaxxer.hikari.HikariDataSource;
 
 @SpringBootApplication
@@ -16,6 +17,11 @@ public class BanksApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BanksApplication.class, args);
+	}
+	
+	@Bean
+	public Bank bank() {
+		return new Bank();
 	}
 	
 	@Bean
@@ -51,7 +57,7 @@ public class BanksApplication {
 		HikariDataSource dataSource = new HikariDataSource();
 		dataSource.setMaximumPoolSize(100);
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/olify_markets");
+		dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/olify_banks");
 		dataSource.setUsername("root");
 		dataSource.setPassword("olify");
 		dataSource.addDataSourceProperty("cachePrepStmts", true);

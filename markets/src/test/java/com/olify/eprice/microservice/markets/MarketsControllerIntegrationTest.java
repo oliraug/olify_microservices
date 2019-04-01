@@ -12,8 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.olify.eprice.microservice.markets.Model.Markets;
 
 @RunWith(SpringJUnit4ClassRunner.class)

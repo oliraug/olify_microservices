@@ -5,6 +5,7 @@ package com.olify.eprice.microservice.category.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Email;
 
 /**
  * @author Olify
@@ -12,11 +13,19 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class OlifyUser{
-	private Long id;
+	/*@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator="native")*/
+	@Column(name="user_id")
+	private Long userId;	
+	@Column(name="email", nullable=false)
+	@Email
     private String email;
-	private String password;	
+	@Column(name="password")
+	private String password;
+	@Column(name="enabled")
 	private boolean enabled = true;	
-	private String profileImg;	
+	@Column(name="profileImg")
+	private String profileImg;		
 	@Column(name="not_expired")
 	private boolean accountNonExpired;	
 	@Column(name="not_locked")
@@ -37,12 +46,12 @@ public class OlifyUser{
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getEmail() {
@@ -95,8 +104,9 @@ public class OlifyUser{
 	
 	@Override
 	public String toString() {
-		return "OlifyUser [id=" + id + ", email=" + email + ", password=" + password + ", enabled=" + enabled
-				+ ", profileImg=" + profileImg + ", accountNonExpired=" + accountNonExpired + ", accountNonLocked="
-				+ accountNonLocked + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append(userId).append(email).append(password).append(enabled).append(profileImg)
+				.append(accountNonExpired).append(accountNonLocked);
+		return builder.toString();
 	}
 }

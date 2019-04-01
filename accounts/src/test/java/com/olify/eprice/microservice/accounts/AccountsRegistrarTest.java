@@ -20,17 +20,29 @@ import com.olify.eprice.microservice.repository.AccountsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountsRegistrarTest {
+	@Mock
 	private Accounts mockAccounts;
 	@Mock
 	private AccountsRepository accountsRepo;
 	@InjectMocks
 	private AccountsRegistrar mockRegistrar;
 	private double amount;
+	String accountName = "Masiga Moses";
+	String parent = "A_PARENT"; 
+	String internalType = "A_TYPE";
+	String accountType = "SAVINGS_ACCOUNT";
+	double debit = 0.00;
+	double credit = 1000.00;
+	double balance = 4000.00;
+	String accountStatus = "ACTIVE";
+	String defaultTaxes = "PAYE";
+	String reconcillation = "RECONCILLATION";
+	String notes = "ACCOUNT OPENING";
 	
 	@Before
 	public void setUp() throws Exception {
 		mockRegistrar = mock(AccountsRegistrar.class);
-		mockAccounts = mock(Accounts.class);
+		mockAccounts = new Accounts(accountName, parent, internalType, accountType, debit, credit, balance, accountStatus, defaultTaxes, reconcillation, notes);
 	}
 
 	@After
@@ -50,22 +62,14 @@ public class AccountsRegistrarTest {
 	}
 	
 	@Test
-	public void test_createNewAccount() throws Exception {
-		//mockAccounts = new Accounts();
-		mockAccounts.setAccountName("Masiga Moses");
-		mockAccounts.setAccountType("Current");
-		mockAccounts.setBalance(10000.00);
-		mockAccounts.setCredit(1000.00);
-		mockAccounts.setDebit(0.00);
-		mockAccounts.setAccountStatus("active");
-		
-		Accounts newAccountInserted = mockRegistrar.createNewAccount(mockAccounts);
+	public void test_createNewAccount() throws Exception {		
+		mockRegistrar.createNewAccount(mockAccounts);
 		
 		/*
 		 * check if accounts has the same composition
 		 */
 		assertThat(mockAccounts, isA(Accounts.class));
-		assertThat(mockAccounts).isEqualTo(newAccountInserted);
+		assertThat(accountName).isEqualTo(mockAccounts.getAccountName());
 	}
 	
 	@Test
@@ -75,9 +79,8 @@ public class AccountsRegistrarTest {
 		oldAccount.setAccountName("Masiga Moses");
 		oldAccount.setAccountType("current");
 		
-		Accounts expectedAccount = new Accounts();
-		expectedAccount = mockRegistrar.updateAccount(oldAccount);
-		assertThat(expectedAccount).isEqualTo(oldAccount);	
+		mockRegistrar.updateAccount(oldAccount);
+		assertThat(accountName).isEqualTo(oldAccount.getAccountName());	
 	}
 	
 	@Test

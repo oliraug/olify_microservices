@@ -12,6 +12,7 @@ public enum ProductMeasures {
 	BOTTLES,
 	BOX,
 	BUNCH,
+	BUNDLE,
 	TONNES,
 	GRAMS,
 	KG,
