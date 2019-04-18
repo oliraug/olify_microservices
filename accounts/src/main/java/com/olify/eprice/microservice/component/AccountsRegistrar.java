@@ -68,7 +68,7 @@ public class AccountsRegistrar {
 
 	public void deposit(Accounts accountNo, double amount) {
 		Accounts account = accountsRepository.getAccount(accountNo);	
-		double balance = account.getBalance();
+		double balance = accountsRepository.getBalance(amount);
 		balance += amount;
 		account.setBalance(balance);
 		accountsRepository.updateAccount(account);

@@ -10,15 +10,19 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.olify.eprice.microservice.component.OlifyProductRegistrar;
 import com.olify.eprice.microservice.model.OlifyProduct;
 import com.olify.eprice.microservice.repository.OlifyProductRepository;
 
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class OlifyProductRegistrarTest {
 	private OlifyProductRepository mockProductRepo;
 	private OlifyProduct product;
 	private OlifyProductRegistrar mockProductReg;
+	private int purchaseQuantity = 15;
 
 	@Before
 	public void setUp() throws Exception {
@@ -61,7 +65,22 @@ public class OlifyProductRegistrarTest {
 		mockProductReg.deleteProduct(1L);
 		
 		//Assert
-		verify(mockProductReg, times(1)).deleteProduct(1L);
+		verify(mockProductReg, times(1)).deleteProduct(1L); 
 	}
 
+	@Test
+	public void test_shouldBeAbleToBuyAProduct() throws InsufficientProductsException {
+		int availableQuantity = 30;
+		//stubbing getAvailableProducts() of productRepository to return 30
+		when(mockProductRepo.getAvailableProducts(product)).thenReturn(availableQuantity);
+		
+		//buy method of OlifyProductRegistrar() that's under test
+		mockProductReg.buy(product, purchaseQuantity);
+		
+		//we confirm that the stubbing performed as expected
+		assertThat(mockProductRepo.getAvailableProducts(product)).isEqualTo(availableQuantity);		
+		
+		//verify(productRepository, atLeastOnce()).orderProduct(product, purchaseQuantity);
+		verify(mockProductRepo, atLeastOnce()).getAvailableProducts(product);
+	}
 }

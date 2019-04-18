@@ -9,6 +9,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.olify.eprice.microservice.markets.Enums.Sex;
 import com.olify.eprice.microservice.markets.Enums.Speciality;
@@ -17,18 +18,21 @@ import javax.persistence.EnumType;
 
 @Embeddable
 public class User {
-	private Long id;
+	@Column(name="user_id")
+	private Long userId;
 	private String name;
 	private String email;
 	private String password;
+	@Column(name="phone_no")
 	private String phoneNo;
 	@Enumerated(EnumType.STRING)
 	private Sex sex;
 	@Enumerated(EnumType.STRING)
 	private Speciality speciality;
-	@Column(name="created_date", insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name="created_date", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date createdAt;
 	
 	public User(String name, String email, String password, String phoneNo, Sex sex, Speciality speciality,
@@ -47,12 +51,12 @@ public class User {
 		super();
 	}
 
-	public Long getId() {
-		return id;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {
@@ -114,7 +118,7 @@ public class User {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(name).append(email).append(password).append(phoneNo).append(sex)
+		builder.append(userId).append(name).append(email).append(password).append(phoneNo).append(sex)
 				.append(speciality).append(createdAt);
 		return builder.toString();
 	}

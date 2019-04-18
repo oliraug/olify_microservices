@@ -5,9 +5,6 @@ package com.olify.eprice.microservice.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

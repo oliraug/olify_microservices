@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.olify.eprice.microservice.model.OlifyProduct;
+import com.olify.eprice.microservice.product.enums.ProductIntention;
+import com.olify.eprice.microservice.product.enums.ProductMeasures;
+import com.olify.eprice.microservice.product.enums.ProductStatus;
 import com.olify.eprice.microservice.repository.OlifyProductRepository;
 
 /**
@@ -29,8 +32,8 @@ public class ProductTestDataGenerator {
 	@PostConstruct
 	public void generateTestData() {
 		productRepository
-				.save(new OlifyProduct(1L,"Pineapples", 10, 3500.0, 125, 55, 35, "nos", "active", "selling", new Date(12/20/2018),"Masiga Moses"));
-		productRepository.save(new OlifyProduct(2L,"Mangoes", 30, 2000.0, 100, 50, 25, "nos", "active", "buying", new Date(12/20/2018),"Masiga Moses"));
+				.save(new OlifyProduct("Pineapples", 10, 3500.0, 125, 55, 35, ProductMeasures.PIECES, ProductStatus.ACTIVE, ProductIntention.SELLING, new Date(12/20/2018),"Masiga Moses"));
+		productRepository.save(new OlifyProduct("Mangoes", 30, 2000.0, 100, 50, 25, ProductMeasures.PIECES, ProductStatus.ACTIVE, ProductIntention.SELLING, new Date(12/20/2018),"Masiga Moses"));
 	}
 
 }

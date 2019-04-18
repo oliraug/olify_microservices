@@ -17,23 +17,34 @@ import com.olify.eprice.microservice.markets.Enums.ProductStatus;
 
 @Embeddable
 public class OlifyProduct {
-	private Long id;
+	@Column(name="product_id")
+	private Long productId;
+	@Column(name="product_name")
 	private String productName;
+	@Column(name="price")
 	private Double price;
+	@Column(name="units")
 	private int units;
+	@Column(name="units_in_stock")
 	private int unitsInStock;
+	@Column(name="units_on_order")
 	private int unitsOnOrder;
+	@Column(name="quantity_per_unit")
 	private int quantityPerUnit;
 	@Enumerated(EnumType.STRING)
+	@Column(name="product_measures")
 	private ProductMeasures productMeasures;
 	@Enumerated(EnumType.STRING)
+	@Column(name="product_status")
 	private ProductStatus productStatus;
 	@Enumerated(EnumType.STRING)
+	@Column(name="product_intention")
 	private ProductIntention productIntention;
 	@Column(name="created_date", insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
 	private Date createdDate;
+	@Column(name="entered_by")
 	private String enteredBy;
 	
 	public OlifyProduct() {
@@ -56,11 +67,11 @@ public class OlifyProduct {
 		this.enteredBy = enteredBy;		
 	}
 	
-	public Long getId() {
-		return id;
+	public Long getproductId() {
+		return productId;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setproductId(Long productId) {
+		this.productId = productId;
 	}
 	public String getProductName() {
 		return productName;
@@ -132,7 +143,7 @@ public class OlifyProduct {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(productName).append(price).append(units).append(unitsInStock).append(unitsOnOrder)
+		builder.append(productId).append(productName).append(price).append(units).append(unitsInStock).append(unitsOnOrder)
 				.append(quantityPerUnit).append(productMeasures).append(productStatus).append(productIntention)
 				.append(createdDate).append(enteredBy);
 		return builder.toString();

@@ -115,6 +115,11 @@
     		<artifactId>hibernate-search-orm</artifactId>
     		<version>5.11.0.Final</version>
 		</dependency>
+		<dependency>
+   			<groupId>org.apache.lucene</groupId>
+   			<artifactId>lucene-core</artifactId>
+   			<version>5.5.0</version>
+		</dependency>
 
 
 	</dependencies>

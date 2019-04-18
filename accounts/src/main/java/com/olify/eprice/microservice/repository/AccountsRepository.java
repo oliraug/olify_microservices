@@ -4,7 +4,7 @@
 package com.olify.eprice.microservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.stereotype.Repository;
 
 import com.olify.eprice.microservice.model.Accounts;
 
@@ -12,7 +12,7 @@ import com.olify.eprice.microservice.model.Accounts;
  * @author Olify
  *
  */
-@RepositoryRestResource(collectionResourceRel = "olify_accounts", path = "olify_accounts")
+@Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 
 	Accounts findByAccountName(String accountname);
@@ -30,4 +30,6 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 	void findByBalance(double amount);
 
 	Accounts getAccount(Accounts accountNo);
+
+	double getBalance(double amount);
 }

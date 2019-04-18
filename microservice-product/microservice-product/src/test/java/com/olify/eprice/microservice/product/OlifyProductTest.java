@@ -3,17 +3,19 @@
  */
 package com.olify.eprice.microservice.product;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
 
+import org.apache.commons.math.stat.descriptive.summary.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.olify.eprice.microservice.model.OlifyProduct;
+import com.olify.eprice.microservice.product.enums.ProductIntention;
+import com.olify.eprice.microservice.product.enums.ProductMeasures;
+import com.olify.eprice.microservice.product.enums.ProductStatus;
 
 /**
  * @author Olify
@@ -27,9 +29,6 @@ public class OlifyProductTest {
 	int unitsInStock = 120;
 	int unitsOnOrder = 35;
 	int quantityPerUnit = 15;
-	String productMeasures = "Kgs";
-	String productStatus = "active";
-	String productIntention = "Selling";
 	Date createdDate = new Date(12/12/2018);
 	String enteredBy = "Moses Masiga";
 
@@ -47,27 +46,25 @@ public class OlifyProductTest {
 	public void tearDown() throws Exception {
 	}
 	
-	private OlifyProduct createTestProductOne() {
-				
-		return new OlifyProduct(id, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
-				productIntention, createdDate, enteredBy);
+	private OlifyProduct createTestProductOne() {				
+		return new OlifyProduct(productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, ProductMeasures.PIECES, ProductStatus.ACTIVE,
+				ProductIntention.SELLING, createdDate, enteredBy);
 	}
 
 	@Test
-	public void testProductShouldFillInAllParameters() throws Exception {
-		
-		OlifyProduct toProduct = new OlifyProduct(id, productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, productMeasures, productStatus,
-				productIntention, createdDate, enteredBy);
-		assertEquals((long) toProduct.getId(), 1L);
+	public void testProductShouldFillInAllParameters() throws Exception {		
+		OlifyProduct toProduct = new OlifyProduct(productName, units, price, unitsInStock, unitsOnOrder, quantityPerUnit, ProductMeasures.PIECES, ProductStatus.ACTIVE,
+				ProductIntention.SELLING, createdDate, enteredBy);
+		//assertEquals((long) toProduct.getId(), 1L);
 		assertThat(toProduct.getProductName()).isEqualTo(productName);
 		assertThat(toProduct.getUnits()).isEqualTo(units);
 		assertThat(toProduct.getPrice()).isEqualTo(price);
 		assertThat(toProduct.getUnitsInStock()).isEqualTo(unitsInStock);
 		assertThat(toProduct.getUnitsOnOrder()).isEqualTo(unitsOnOrder);
 		assertThat(toProduct.getQuantityPerUnit()).isEqualTo(quantityPerUnit);
-		assertThat(toProduct.getProductMeasures()).isEqualTo(productMeasures);
-		assertThat(toProduct.getProductStatus()).isEqualTo(productStatus);
-		assertThat(toProduct.getProductIntention()).isEqualTo(productIntention);
+		assertThat(toProduct.getProductMeasures()).isEqualTo(ProductMeasures.PIECES);
+		assertThat(toProduct.getProductStatus()).isEqualTo(ProductStatus.ACTIVE);
+		assertThat(toProduct.getProductIntention()).isEqualTo(ProductIntention.SELLING);
 		assertThat(toProduct.getCreatedDate()).isEqualTo(createdDate);
 		assertThat(toProduct.getEnteredBy()).isEqualTo(enteredBy);
 	}

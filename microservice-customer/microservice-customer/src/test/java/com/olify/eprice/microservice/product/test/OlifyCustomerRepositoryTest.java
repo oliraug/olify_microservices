@@ -4,49 +4,42 @@
 package com.olify.eprice.microservice.product.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.olify.eprice.microservice.model.OlifyCustomer;
 import com.olify.eprice.microservice.repository.OlifyCustomerRepository;
+import com.olify.eprice.microservicecustomer.MicroserviceCustomerApplication;
 
 /**
  * @author Olify
  *
  */
 @ActiveProfiles("test")
-//@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @DataJpaTest
-@AutoConfigureTestDatabase()
+@ContextConfiguration(classes=MicroserviceCustomerApplication.class)
+@AutoConfigureTestDatabase(replace=Replace.NONE)
 public class OlifyCustomerRepositoryTest {
 /*
  * Use entityManager to create two new rows of data in the Arrival table of test H2 database
  */
-	@Autowired
-	   private TestEntityManager entityManager;
-
-	   @Autowired
-	   private OlifyCustomerRepository olifyCustomerRepository;
+	@Autowired private TestEntityManager entityManager;
+	@Autowired private OlifyCustomerRepository olifyCustomerRepository;
 	   
-	   @Before
-		public void init() throws Exception {
-			MockitoAnnotations.initMocks(this);
-			entityManager = mock(TestEntityManager.class);
-			olifyCustomerRepository = mock(OlifyCustomerRepository.class);
-			//mockCustomer = mock(OlifyCustomer.class);
-		}
-		
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -59,8 +52,8 @@ public class OlifyCustomerRepositoryTest {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		entityManager = null;
-		olifyCustomerRepository = null;
+		entityManager.clear();
+		olifyCustomerRepository.flush();
 	}
 
 	/*
@@ -98,9 +91,16 @@ public class OlifyCustomerRepositoryTest {
 		entityManager.persistAndFlush(customer);
 
 		//when
-		OlifyCustomer testCustomer = olifyCustomerRepository.findAllById(customer.getCustomerId());
+		Iterable<OlifyCustomer> testCustomer = olifyCustomerRepository.findAll();
 		//then
-		assertThat(testCustomer.getCustomerName()).isEqualTo(customer.getCustomerName());		
+		assertThat(testCustomer).hasSize(1).contains(customer);		
+	}
+	
+	@Test
+	public void test_shouldFindNoCustomersIfRepositoryIsEmpty() throws Exception {
+		Iterable<OlifyCustomer> customer = olifyCustomerRepository.findAll();
+		
+		assertThat(customer).isEmpty();
 	}
 
 }

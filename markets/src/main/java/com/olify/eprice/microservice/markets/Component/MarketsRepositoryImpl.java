@@ -9,7 +9,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.olify.eprice.microservice.markets.MarketsNotFoundException;
@@ -18,10 +17,9 @@ import com.olify.eprice.microservice.markets.Repository.MarketsRepository;
 import com.olify.eprice.microservice.markets.Repository.MarketsRepositoryCustom;
 
 @Service
-//@Lazy
 public class MarketsRepositoryImpl implements MarketsRepositoryCustom {
-	EntityManager em;
-	@Autowired @Qualifier MarketsRepository marketsRepository;
+	@Autowired protected EntityManager em;
+	@Autowired MarketsRepository marketsRepository;
 	@Override
 	public Markets findByMarketName(String marketName) {
 		CriteriaBuilder builder = em.getCriteriaBuilder();

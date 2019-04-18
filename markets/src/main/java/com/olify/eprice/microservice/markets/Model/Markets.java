@@ -19,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.olify.eprice.microservice.markets.Enums.MarketStatus;
 
@@ -30,7 +31,7 @@ public class Markets {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator="native")
 	@GenericGenerator(name="native", strategy="native")
-	@Column(name="id", unique=true, nullable=false)
+	@Column(name="market_id", unique=true, nullable=false, insertable=false, updatable=false)
 	private Long id;
 	@Column(name="market_name")
 	@NotBlank
@@ -50,13 +51,15 @@ public class Markets {
 	@Column(name="country")
 	@NotBlank
 	private String country;
-	@Column(name="created_date", insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name="created_date", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date createdAt;
-	@Column(name="updated_date", insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name="updated_date", insertable=false, updatable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date updatedAt;
 
 	public Markets() {

@@ -31,7 +31,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.olify.eprice.microservice.component.OlifyCustomerRegistrar;
-import com.olify.eprice.microservice.configuration.JavaConfiguration;
 import com.olify.eprice.microservice.model.OlifyCustomer;
 import com.olify.eprice.microservicecustomer.MicroserviceCustomerApplication;
 
@@ -39,7 +38,7 @@ import com.olify.eprice.microservicecustomer.MicroserviceCustomerApplication;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MicroserviceCustomerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")
-@ContextConfiguration(classes=JavaConfiguration.class)
+@ContextConfiguration(classes=MicroserviceCustomerApplication.class)
 public class OlifyCustomerWebIntegrationTest {
 	@Autowired
 	private OlifyCustomerRegistrar olifyCustomerRegistrar;
@@ -58,7 +57,7 @@ public class OlifyCustomerWebIntegrationTest {
 	@Test
 	public void IsCustomerReturnedAsHTML() {
 
-		OlifyCustomer customerMasiga = olifyCustomerRegistrar.findByCustomerName("Masiga").get();
+		OlifyCustomer customerMasiga = olifyCustomerRegistrar.findByCustomerName("Masiga").get(1);
 
 		String body = getForMediaType(String.class, MediaType.TEXT_HTML,
 				olifyCustomerURL() + customerMasiga.getCustomerId() + ".html");
@@ -92,7 +91,7 @@ public class OlifyCustomerWebIntegrationTest {
 	@Test
 	public void testIsCustomerReturnedAsJSON() {
 
-		OlifyCustomer customerMasiga = olifyCustomerRegistrar.findByCustomerName("Masiga").get();
+		OlifyCustomer customerMasiga = olifyCustomerRegistrar.findByCustomerName("Masiga").get(1);
 
 		String url = olifyCustomerURL() + "customer/" + customerMasiga.getCustomerId();
 		OlifyCustomer body = getForMediaType(OlifyCustomer.class, MediaType.APPLICATION_JSON, url);

@@ -57,11 +57,40 @@ public class BankRepositoryTest {
 	}
 	
 	@Test
-	public void test_shouldSaveBank() throws Exception {
-		Bank bank = bankRepository.findByBankName(bankName);
-		bank.setBankName(bankName);
-		Bank newBank = bankRepository.save(bank);
+	public void test_whenSaveBankShouldReturnFindByBankName() throws Exception {
+		bankRepository.save(new Bank(bankName, bankCode, bankStreet, bankZip,  bankCity, bankState, bankPhone, bankFax, bankEmail,
+				bankCountry, bankStatus));		
 		
-		assertThat(bank.getBankName()).isEqualTo(newBank.getBankName());
+		assertThat(bankRepository.findByBankName(bankName)).isNotNull();
+	}
+	
+	@Test
+	public void test_shouldFindNoBanksIfRepositoryIsEmpty() throws Exception {
+		Iterable<Bank> banks = bankRepository.findAll();
+		
+		assertThat(banks).isEmpty();
+	}
+	
+	@Test
+	public void test_shouldDeleteAllBanks() throws Exception {
+		entityManager.persist(new Bank("Centenary", "CENTUG", "Mapeera House,Kampala Road", "256", "Kampala", "Kampala Central", "0414707172", "0414707172", "info@centenary.co.ug", "Uganda", "Active"));
+		entityManager.persist(new Bank("Kenya Commercial Bank", "KCBUG", "Commercial Plaza,Kampala Road", "256", "Kampala", "Kampala Central", "0414606172", "0414606172", "info@kcb.co.ug", "Uganda", "Active"));
+		
+		bankRepository.deleteAll();
+		
+		assertThat(bankRepository.findAll()).isEmpty();
+	}
+	
+	@Test
+	public void test_shouldFindAllBanks() throws Exception {
+		Bank bank = new Bank("Centenary", "CENTUG", "Mapeera House,Kampala Road", "256", "Kampala", "Kampala Central", "0414707172", "0414707172", "info@centenary.co.ug", "Uganda", "Active");
+		entityManager.persist(bank);
+		Bank bankOne = new Bank("Equity", "EqUG", "Church House,Kampala Road", "256", "Kampala", "Kampala Central", "0414301172", "0414301172", "info@equity.co.ug", "Uganda", "Active");
+		entityManager.persist(bankOne);
+		Bank bankTwo = new Bank("Baroda", "BARUG", "Kampala Road", "256", "Kampala", "Kampala Central", "0414504172", "0414504172", "info@baroda.co.ug", "Uganda", "Active");
+		entityManager.persist(bankTwo);
+		
+		Iterable<Bank> banks = bankRepository.findAll();
+		assertThat(banks).hasSize(3).contains(bank, bankOne, bankTwo);
 	}
 }

@@ -3,9 +3,6 @@
  */
 package com.olify.eprice.microservice.component;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +15,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.olify.eprice.microservice.model.OlifyProduct;
 import com.olify.eprice.microservice.product.InsufficientProductsException;
@@ -27,7 +26,7 @@ import com.olify.eprice.microservice.repository.OlifyProductRepository;
  * @author olify
  *
  */
-@Component
+@Service
 public class OlifyProductRegistrar {
 	@Autowired
 	OlifyProductRepository productRepo;
@@ -176,7 +175,7 @@ public class OlifyProductRegistrar {
 				throw new InsufficientProductsException();
 			}
 			productRepo.orderProduct(product, orderedQuantity);
-			transactionStatus = true;
+			transactionStatus = true; 
 			return transactionStatus;
 		}
 

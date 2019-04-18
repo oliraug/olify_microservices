@@ -32,8 +32,7 @@ public class MarketsTest {
 	public void tearDown() throws Exception {
 	}
 
-private Markets createTestMarketOne() {
-		
+private Markets createTestMarketOne() {		
 		return new Markets(marketName, marketStatus, user, location,  product, country, createdAt, updatedAt);
 	}
 
@@ -41,7 +40,7 @@ private Markets createTestMarketOne() {
 	public void testMarketShouldFillInAllParameters() throws Exception {
 				
 		Markets toMarkets = new Markets(marketName, marketStatus, user, location,  product, country, createdAt, updatedAt);
-		//assertEquals((long) toMarkets.getId(), 1L);
+		
 		assertThat(toMarkets.getMarketName()).isEqualTo(marketName);
 		assertThat(toMarkets.getMarketStatus()).isEqualTo(marketStatus);
 		assertThat(toMarkets.getUser()).isEqualTo(user);
