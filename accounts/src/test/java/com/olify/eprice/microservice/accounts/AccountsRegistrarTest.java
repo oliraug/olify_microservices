@@ -2,7 +2,6 @@ package com.olify.eprice.microservice.accounts;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -43,12 +42,15 @@ public class AccountsRegistrarTest {
 	String reconcillation = "RECONCILLATION";
 	String notes = "ACCOUNT OPENING";
 	private double actualBalance;
+	private Long accountFrom = 1l;
+	private Long accountTo = 2l;
+	private Long accountNo = 3l;
 	private static String ACCOUNT_A_NAME = "accountA";
 	
 	@Before
 	public void setUp() throws Exception {
 		mockRegistrar = mock(AccountsRegistrar.class);
-		mockAccounts = new Accounts(accountName, parent, internalType, accountType, debit, credit, balance, accountStatus, defaultTaxes, reconcillation, notes);
+		mockAccounts = new Accounts(accountNo , accountName, parent, internalType, accountType, debit, credit, balance, accountStatus, defaultTaxes, reconcillation, notes);
 	}
 
 	@After
@@ -65,7 +67,7 @@ public class AccountsRegistrarTest {
 		/*
 		 * check if accounts has the same composition
 		 */
-		assertThat(mockAccounts, isA(Accounts.class));
+		assertThat(mockAccounts).isEqualTo(Accounts.class);
 		assertThat(accountName).isEqualTo(mockAccounts.getAccountName());
 	}
 	
@@ -87,7 +89,7 @@ public class AccountsRegistrarTest {
 		toBeRemovedAccount.setAccountName("Masiga Moses");
 		toBeRemovedAccount.setAccountType("current");
 		//remove the account
-		assertThat(mockRegistrar.removeAccount(toBeRemovedAccount)).isTrue();
+		assertThat(mockRegistrar.deleteAccount(toBeRemovedAccount)).isEqualTo(mockAccounts);
 	}
 	
 	@Test
@@ -112,12 +114,21 @@ public class AccountsRegistrarTest {
 	}
 	
 	@Test
+	public void test_shouldAllowToWithdrawFromAccount() throws Exception {
+		// when
+		mockRegistrar.withdraw(mockAccounts, 12000.0);
+		// then
+		double balance = mockRegistrar.getBalance(amount);
+		assertThat(actualBalance).isEqualTo(balance);
+	}
+	
+	@Test
 	public void test_shouldTransferMoneyFromOneAccountToAnother() throws InsufficientFundsException{
 		double tranferAmount = 1000.00;
-		Accounts account = new Accounts(5000.00);
-		mockRegistrar.transferTo(tranferAmount, account);
+		//Accounts account = new Accounts(5000.00);
+		mockRegistrar.transferTo(tranferAmount, accountFrom, accountTo);
 		assertThat(accountsRepo.getBalance(amount)).isEqualTo(actualBalance);
-		verify(mockRegistrar,  atLeastOnce()).transferTo(tranferAmount, account);
+		verify(mockRegistrar,  atLeastOnce()).transferTo(tranferAmount, accountFrom, accountTo);
 	} 
 	
 	@Test
@@ -145,7 +156,7 @@ public class AccountsRegistrarTest {
 	
 	@Test
 	public void test_deleteAccountUsesAccountsRepository() throws Exception {
-		mockRegistrar.delete(mockAccounts);
-		verify(mockRegistrar, times(1)).delete(mockAccounts);
+		mockRegistrar.deleteAccount(mockAccounts);
+		verify(mockRegistrar, times(1)).deleteAccount(mockAccounts);
 	}
 }

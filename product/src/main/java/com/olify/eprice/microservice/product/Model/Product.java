@@ -60,7 +60,7 @@ public class Product {
 	private Date createdDate;
 	@Column(name="entered_by", nullable=false)
 	private String enteredBy;
-
+	
 
 	public Product() {	
 	}
@@ -176,7 +176,7 @@ public class Product {
 	public void setEnteredBy(String enteredBy) {
 		this.enteredBy = enteredBy;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

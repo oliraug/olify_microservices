@@ -32,4 +32,8 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 	Accounts getAccount(Accounts accountNo);
 
 	double getBalance(double amount);
+
+	Accounts findByAccountNo(Long fromAccountNo);
+	
+	Accounts deleteAccount(Accounts Accounts);
 }

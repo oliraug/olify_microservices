@@ -5,9 +5,8 @@ package com.olify.eprice.microservice.product.Component;
 
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 
-import org.apache.log4j.Logger;
-import org.hamcrest.Matcher;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,11 +15,14 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.olify.eprice.microservice.product.InsufficientProductsException;
 import com.olify.eprice.microservice.product.Model.Product;
+import com.olify.eprice.microservice.product.Repository.ProductRepository;
 import com.olify.eprice.microservice.product.Repository.ProductService;
 
 /**
@@ -28,12 +30,12 @@ import com.olify.eprice.microservice.product.Repository.ProductService;
  *
  */
 @Service
-public class ProductRegistrar {
+@Transactional
+public class ProductServiceImpl implements ProductService{
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
-	ProductService productRepo;
-	
-	public final static Logger logger = Logger.getLogger(ProductRegistrar.class);
-	
+	ProductRepository productRepository;
+		
 	//Method Used To Create The Hibernate's SessionFactory Object
 		public static SessionFactory getSessionFactory() {
 	    // Creating Configuration Instance & Passing Hibernate Configuration File
@@ -81,7 +83,7 @@ public class ProductRegistrar {
 		}
 		
 		//method used to update records to a database table		
-		public void saveOrUpdate(Product product) {
+		public Product saveOrUpdate(Product product) {
 				Session session = getSessionFactory().openSession();
 				
 				//creating transaction object
@@ -101,33 +103,20 @@ public class ProductRegistrar {
 				tx.commit();
 				session.close();
 				logger.info("Product record successfully updated!=" + product.toString());
+				return productRepository.save(product);
 			}
 		
 		public boolean isProductNameExist(String productname) {
 			Session session = getSessionFactory().openSession();
 			//Creating Transaction object
 			Transaction transaction = session.beginTransaction();
-			Product product = getOne(productname);
+			Product product = findByProductName(productname);
 			session.contains(product);
 			//Commit Transaction to database
 			transaction.commit();
 			//closing the session object
 			session.close();
 			return true;
-		}
-
-		private Product getOne(String productname) {
-			return productRepo.getOne(productname);
-		}
-
-		//getting product by name
-		public Product getOne(Long id) {
-			Session session = getSessionFactory().openSession();
-			Product product = (Product) session.createQuery("FROM olify_product WHERE product_name = :product_name");
-			
-			//closing the session object
-			session.close();
-			return product;
 		}
 
 		public Long createProduct(Product product) {
@@ -146,7 +135,7 @@ public class ProductRegistrar {
 		}
 
 		//Retrieving product by id
-		public Product getProductById(Long productId) {
+		public Product getProductById(Long id) {
 			Session session = getSessionFactory().openSession();
 			Product product = (Product) session.createQuery("FROM product WHERE product_id = :product_id");
 			
@@ -169,19 +158,51 @@ public class ProductRegistrar {
 		}
 		
 		
-		public boolean buy(Product product, int orderedQuantity) throws InsufficientProductsException {
+		public boolean buy(Product product, int unitsOnOrder) throws InsufficientProductsException {
 			boolean transactionStatus = false;
 			//called getAvailableProducts() of OlifyProductRepository to check if sufficient quantity of the specified product is available
-			int availableQuantity = productRepo.getAvailableProducts(product);
-			if(orderedQuantity > availableQuantity) {
+			int availableQuantity = productRepository.findByUnitsInStock(product);
+			if(unitsOnOrder > availableQuantity) {
 				throw new InsufficientProductsException();
 			}
-			productRepo.orderProduct(product, orderedQuantity);
+			//productRepository.findByProductNameAndUnitsOnOrder(product, unitsOnOrder);
 			transactionStatus = true; 
 			return transactionStatus;
 		}
 
-		public Product getProductDetails(Matcher<String> productName) {
-			return null;
+		public void delete(Product prod) {
+			logger.info("product is deleted successfully...");
+			productRepository.delete(prod);
 		}
+
+		public int getAvailableProducts(Product product) {
+	
+			return productRepository.findByUnitsInStock(product);
+		}
+
+		@Override
+		public int findByProductNameAndUnitsOnOrder(String productName, int unitsOnOrder) {
+			
+			return productRepository.findByProductNameAndUnitsOnOrder(productName, unitsOnOrder);
+		}
+
+		public Product findByProductName(String productName) {
+			return productRepository.findByProductName(productName);
+		}
+
+		@Override
+		public Product getOne(long id) {
+			Session session = getSessionFactory().openSession();
+			Product product = (Product) session.createQuery("FROM olify_product WHERE product_name = :product_name");
+			
+			//closing the session object
+			session.close();
+			return product;
+		}
+
+		/*@Override
+		public Product save(Product product) {
+			logger.info("product is saved successfully...");
+			return productRepository.save(product);
+		}*/
 }

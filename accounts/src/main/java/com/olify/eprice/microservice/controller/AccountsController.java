@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -24,6 +27,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import com.olify.eprice.microservice.component.AccountsRegistrar;
 import com.olify.eprice.microservice.model.Accounts;
+import com.olify.eprice.microservice.model.InsufficientFundsException;
 
 /**
  * @author Olify
@@ -36,9 +40,6 @@ import com.olify.eprice.microservice.model.Accounts;
 public class AccountsController {
 	@Autowired
 	private AccountsRegistrar accountsRegistrar;
-	public AccountsController(AccountsRegistrar accountsRegistrar) {
-		this.accountsRegistrar = accountsRegistrar;
-	}
 	
 	/*To save an account*/
 	@PostMapping("/accounts")
@@ -50,8 +51,8 @@ public class AccountsController {
 	/*Get an account by name*/
 	@GetMapping(value="/accounts/{id}")
 	@ApiOperation(value = "Get an account", notes = "Return an account")
-	public List<String> getAccounts(@PathVariable("id") Long id){
-		return accountsRegistrar.findAll(id)
+	public List<String> getAllAccounts(){
+		return accountsRegistrar.findAllAccounts()
 								.stream()
 								.map(Accounts::getAccountName)
 								.collect(Collectors.toList());
@@ -87,6 +88,33 @@ public class AccountsController {
 		return ResponseEntity.ok().body(updateAccount);		
 	}
 	
+	/*Deposit money to an account*/
+	@PostMapping("/deposit/{account_no}/{balance}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseEntity<Accounts> deposit(@PathVariable("account_no") Long accountNo,@PathVariable("balance") Double balance) throws InsufficientFundsException {
+		accountsRegistrar.deposit(accountsRegistrar.findByAccountNo(accountNo), balance);
+		return ResponseEntity.ok().build();
+	}
+	
+	/*withdraw money from an account*/
+	@GetMapping("/withdraw/{account_no}/{balance}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseEntity<Accounts> withdraw(@PathVariable("account_no") Long accountNo,@PathVariable("balance") Double balance) throws InsufficientFundsException {
+		accountsRegistrar.withdraw(accountsRegistrar.findByAccountNo(accountNo), balance);
+		return ResponseEntity.ok().build();
+	}
+	
+	/*Transfer money from one account to another*/	
+	@PutMapping("/transferTo/{fromId}/{toId}/{balance}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseEntity<Accounts> transferMoney(@PathVariable("fromId") Long fromId,@PathVariable("toId") Long toId,@PathVariable("balance") Double balance) throws InsufficientFundsException {
+		accountsRegistrar.transferTo(balance, fromId, toId);
+		return ResponseEntity.ok().build();
+	}
+	
 	/*Delete an account*/
 	@DeleteMapping("/accounts/{id}")
 	@ApiOperation(value = "Delete an account", notes = "")
@@ -95,7 +123,7 @@ public class AccountsController {
 		if(account == null) {
 			return ResponseEntity.notFound().build();
 		}
-		accountsRegistrar.delete(account);
+		accountsRegistrar.deleteAccount(account);
 		
 		return ResponseEntity.ok().build();
 	}

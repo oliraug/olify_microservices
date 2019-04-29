@@ -31,6 +31,8 @@ public class Accounts {
 	@GenericGenerator(name="native", strategy="native")
 	@Column(name="account_id")
 	private Long id;
+	@Column(name="account_no", nullable=false)
+	private Long accountNo;
 	@NotBlank
 	@Column(name="account_name")
 	private String accountName;
@@ -67,9 +69,10 @@ public class Accounts {
 	public Accounts() {
 		
 	}
-	public Accounts(String accountName, String parent, String internalType, String accountType, double debit, double credit,
+	public Accounts(Long accountNo, String accountName, String parent, String internalType, String accountType, double debit, double credit,
 			double balance, String accountStatus, String defaultTaxes, String reconcillation, String notes) {
 		super();
+		this.accountNo = accountNo;
 		this.accountName = accountName;
 		this.parent = parent;
 		this.internalType = internalType;
@@ -97,6 +100,12 @@ public class Accounts {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Long getAccountNo() {
+		return accountNo;
+	}
+	public void setAccountNo(Long accountNo) {
+		this.accountNo = accountNo;
 	}
 	public String getParent() {
 		return parent;
@@ -162,7 +171,7 @@ public class Accounts {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(id).append(accountName).append(parent).append(internalType)
+		builder.append(id).append(accountNo).append(accountName).append(parent).append(internalType)
 				.append(accountType).append(debit).append(credit).append(balance)
 				.append(accountStatus).append(defaultTaxes).append(reconcillation).append(notes);
 		return builder.toString();

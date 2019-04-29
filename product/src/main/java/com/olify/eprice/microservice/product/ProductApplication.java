@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.aws.autoconfigure.context.ContextRegionProviderAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -12,7 +13,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.olify.eprice.microservice.product.Component.ProductRegistrar;
+import com.olify.eprice.microservice.product.Component.ProductServiceImpl;
 import com.olify.eprice.microservice.product.Controller.ProductController;
 import com.olify.eprice.microservice.product.Model.Product;
 import com.olify.eprice.microservice.product.Repository.ProductRepository;
@@ -26,6 +27,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaAuditing
 @EnableJpaRepositories(basePackages="com.olify.eprice.microservice.product.Repository")
 @EnableTransactionManagement
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class ProductApplication {
 
 	public static void main(String[] args) {
@@ -42,9 +44,9 @@ public class ProductApplication {
 		return null;		
 	}
 	
-	@Bean(name="productRegistrar")
-	public ProductRegistrar productRegistrar() {
-		return new ProductRegistrar();		
+	@Bean(name="productServiceImpl")
+	public ProductServiceImpl productServiceImpl() {
+		return new ProductServiceImpl();		
 	}
 	
 	@Bean(name="product")

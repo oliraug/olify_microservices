@@ -14,6 +14,7 @@ import com.olify.eprice.microservice.product.Model.Product;
  */
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>{
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductService {
 	Product findByProductName(String productName);
+	int findByUnitsInStock(Product product);
 }

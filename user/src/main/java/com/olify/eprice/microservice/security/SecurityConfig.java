@@ -16,6 +16,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.olify.eprice.microservice.model.JwtConfig;
 
@@ -28,12 +30,13 @@ import com.olify.eprice.microservice.model.JwtConfig;
 @EnableWebSecurity // Enable security config. This annotation denotes config for spring security.
 @EnableScheduling
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	//private final static Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 	private AuthenticationEntryPoint unauthorizedHandler;
 	@Autowired
 	private JwtConfig jwtConfig;
+	private LogoutSuccessHandler logoutSuccessHandler;
+	private LogoutHandler logoutHandler;
+	private String cookieNamesToClear;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -53,13 +56,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN")
 	            //authenticated requests
-	            .anyRequest().authenticated();
+	            .anyRequest().authenticated()
+	            .and()
+	            .formLogin()
+	            .loginPage("/login")
+	            .permitAll();
 	            
 	 // Add a filter to validate the tokens with every request
 	    http.addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig),  UsernamePasswordAuthenticationFilter.class);
 	    
 	    //Disable page caching
 	    http.headers().cacheControl();
+	    
+	    //handling logout
+	    http
+	    .logout()  //provides logout support
+	    .logoutUrl("/logout")  //the url that triggers log out to occur
+	    .logoutSuccessUrl("/index")  //the url to redirect to after logout has occurred
+	    .logoutSuccessHandler(logoutSuccessHandler)
+	    .invalidateHttpSession(true)
+	    .addLogoutHandler(logoutHandler)
+	    .deleteCookies(cookieNamesToClear);	    
 	}
 
 	@Bean

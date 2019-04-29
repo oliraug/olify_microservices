@@ -7,27 +7,29 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.inOrder;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.olify.eprice.microservice.product.Component.ProductRegistrar;
+import com.olify.eprice.microservice.product.Component.ProductServiceImpl;
 import com.olify.eprice.microservice.product.Model.Product;
-import com.olify.eprice.microservice.product.Repository.ProductService;
+import com.olify.eprice.microservice.product.Repository.ProductRepository;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
-public class ProductRegistrarTest {
-	private ProductService mockProductRepo;
+public class ProductServiceImplTest {
+	private ProductRepository mockProductRepo;
 	private Product product;
-	private ProductRegistrar mockProductReg;
+	private ProductServiceImpl mockProductReg;
 	private int purchaseQuantity = 15;
 
 	@Before
 	public void setUp() throws Exception {
-		mockProductRepo = mock(ProductService.class);
-		mockProductReg = mock(ProductRegistrar.class);
+		mockProductRepo = mock(ProductRepository.class);
+		mockProductReg = mock(ProductServiceImpl.class);
 	}
 
 	@Test
@@ -72,15 +74,33 @@ public class ProductRegistrarTest {
 	public void test_shouldBeAbleToBuyAProduct() throws InsufficientProductsException {
 		int availableQuantity = 30;
 		//stubbing getAvailableProducts() of productRepository to return 30
-		when(mockProductRepo.getAvailableProducts(product)).thenReturn(availableQuantity);
+		when(mockProductRepo.findByUnitsInStock(product)).thenReturn(availableQuantity);
 		
-		//buy method of OlifyProductRegistrar() that's under test
+		//buy method of ProductServiceImpl() that's under test
 		mockProductReg.buy(product, purchaseQuantity);
 		
 		//we confirm that the stubbing performed as expected
-		assertThat(mockProductRepo.getAvailableProducts(product)).isEqualTo(availableQuantity);		
+		assertThat(mockProductRepo.findByUnitsInStock(product)).isEqualTo(availableQuantity);		
 		
-		//verify(productRepository, atLeastOnce()).orderProduct(product, purchaseQuantity);
-		verify(mockProductRepo, atLeastOnce()).getAvailableProducts(product);
+		verify(mockProductRepo, atLeastOnce()).findByUnitsInStock(product);
+		
+		//used the inOrder() method to verify the order of method invocation that the buy() method makes on ProductServiceImpl
+		InOrder order = inOrder(mockProductRepo);
+		order.verify(mockProductRepo).findByUnitsInStock(product);
+		//order.verify(mockProductRepo).orderProduct(product, purchaseQuantity);
 	}
+	
+	@Test(expected=InsufficientProductsException.class)
+	public void test_shouldPurchaseWithInsufficientAvailableQuantity() throws InsufficientProductsException {
+		int quantityAvailable=3;
+		
+		when(mockProductReg.getAvailableProducts(product)).thenReturn(quantityAvailable);
+		try {
+			mockProductReg.buy(product, purchaseQuantity);
+		} catch(InsufficientProductsException e) {
+			//verify(mockProductReg, times(0)).findByProductNameAndUnitsOnOrder(product, purchaseQuantity);
+			throw e;
+		}
+	}
+	
 }
